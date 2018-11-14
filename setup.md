@@ -30,7 +30,7 @@ var contract = web3.eth.contract(/* contract_abi */);
 
 var deploy = {from: eth.coinbase, data: /* contract_bytecode */, gas: 2000000};
 
-var instance = contract.new(/* candidates */, deploy);
+var instance = contract.new(/* ctor args */, deploy);
 
 // Error: invalid address
 // web3.eth.defaultAccount = web3.eth.accounts[0]
