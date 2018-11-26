@@ -1,88 +1,44 @@
 # [Solidity](https://solidity.readthedocs.io/en/latest/)
 
-Features
+### Features
+
 * Influenced by C++, JS and Python
 * Statically typed
 * Compiled
 * [Remix](https://remix.ethereum.org): try out Solidity in browser
 
+### Contract basics
+
 * A **contract** is a collection of code and data that resides at a specific address on the eth blockchain
-```
-pragma solidity >=0.4.0 <0.6.0;
+  * Basic example: [simple storage](src/simple_storage.sol)
+  * [Coin example](src/coin.sol), [client side js event callback](src/coin_client_send_callback.js)
 
-contract SimpleStorage {
-    uint storedData;
+### Blockchain
 
-    function set(uint x) public {
-        storedData = x;
-    }
+For the purpose of this discussion, think of them as **globally shared transactional database**.
 
-    function get() public view returns (uint) {
-        return storedData;
-    }
-}
-```
+For how that's done via public key cryptography and proof-of-work, refer to [first discussion](https://github.com/zhehaowang/zhehao.me/blob/master/tech-notes/blockchain/blockchain.pdf).
 
-```
-pragma solidity >0.4.99 <0.6.0;
+"Transactional": in the Coin example, in a `send` call where A transfers to B, if we call `balances[A]` and `balances[B]` at the same time, the result is an invariant.
 
-contract Coin {
-    // The keyword "public" makes those variables
-    // easily readable from outside.
-    address public minter;
-    // address is a 160-bit value that does not allow arithmetic oprs, for
-    // storing address of contracts or of key pairs belonging to external
-    // persons. In this case, the key pair of a minter, which is a state of the
-    // contract.
+In practice for Ethereum, a new block is grown roughly every 17s.
 
-    mapping (address => uint) public balances;
-    // a hashtable, but keep in mind you can't iterate all keys, or all values,
-    // but you can use [] operator to query the hashtable.
+A transaction can be reverted, but the longer you wait, the less likely it will be.
 
-    // Events allow light clients to react to
-    // changes efficiently.
-    event Sent(address from, address to, uint amount);
-    // send 'emits' a Sent event, to which clients can subscribe without much
-    // cost.
+### Ethereum virtual machine: the runtime environment
 
-    // This is the constructor whose code is
-    // run only when the contract is created.
-    constructor() public {
-        minter = msg.sender;
-        // msg (and tx, block) is a special global variable that contains
-        // certain properties which allow access to the blockchain. msg.sender
-        // is the address where the current (external) call is from.
-    }
+* **Accounts**: external (user key pair), contract (when created), each account has a balance in wei (`1 ether = 10^18 wei`)
+* **Transactions**: a message from one account to another, and can contain payload and ether
+  * if target account contains code, the code is executed and payload is input data.
+  * if target account is not set, the transaction creates a new contract. Payload is EVM bytecode to be executed, output from its execution is the code of the contract.
+* Upon creation, each transaction is charged with a certain amount of **gas**, to limit the amount of work to execute the transaction and to pay for the execution. Gas price is a value set by the creator of the transaction, who pays `gas price * gas` up front from the sending account. Out-of-gas causes halt in execution and reverts the state back, and any remaining gas is refunded to the sender.
 
-    // external functions:
-    function mint(address receiver, uint amount) public {
-        require(msg.sender == minter);
-        require(amount < 1e60);
-        balances[receiver] += amount;
-    }
+* EVM has storage, memory and stack.
+  * Storage (`<256-bit-word, 256-bit-word>`) is persistent between function calls and transactions. Cannot be enumerated, and a contract can only read / write its own storage.
+  * A contract obtains memory for each message call (for call payload and return val). Gas is paid to expand memory.
+  * Stack is where the data for computation is stored. EVM is a stack machine (as opposed to a register machine).
+(_a note on Turing completeness, a single-stack pushdown automaton is not Turing complete, but a two-stack machine is equivalent to a Turing machine_)
 
-    function send(address receiver, uint amount) public {
-        require(amount <= balances[msg.sender], "Insufficient balance.");
-        balances[msg.sender] -= amount;
-        balances[receiver] += amount;
-        emit Sent(msg.sender, receiver, amount);
-    }
-}
-```
+* [EVM instruction set](https://solidity.readthedocs.io/en/latest/assembly.html#opcodes) (arithmetic, bit, logical, comparison, conditional and unconditional jumps)
 
-```js
-// this code on client side can listen to emitted Sent events
-
-// Coin is a contract object created via web3.js
-Coin.Sent().watch({}, '', function(error, result) {
-    if (!error) {
-        console.log("Coin transfer: " + result.args.amount +
-            " coins were sent from " + result.args.from +
-            " to " + result.args.to + ".");
-        console.log("Balances now:\n" +
-            "Sender: " + Coin.balances.call(result.args.from) +
-            "Receiver: " + Coin.balances.call(result.args.to));
-    }
-})
-```
-
+* The only way to remove code from the blockchain is when a contract at that address performs `selfdestruct`. Remaining ether is returned to a target, and if someone sends ether to removed contracts, the ether is forever lost. A deleted contract is still part of the history recorded by blockchain. It may be a better idea to disable a contract than `selfdestruct` it.
