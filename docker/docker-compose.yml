@@ -3,7 +3,7 @@ services:
   geth-bootnode:
     hostname: geth-bootnode
     environment: 
-      - nodekeyhex=08f0e1dee5c1b4645f3331a566009e41a4514b6cd28656d63d0449ecf812812b #Needs to be fix, so that the miners know the resulting enode id
+      - nodekeyhex=08f0e1dee5c1b4645f3331a566009e41a4514b6cd28656d63d0449ecf812812b # Needs to be fixed, so that the miners know the resulting enode id
     build:
       context: ./bootnode
     ports: 
@@ -24,7 +24,7 @@ services:
       context: ./node
       args:
         privatekey: df504d175ae63abf209bad9dda965310d99559620550e74521a6798a41215f46 # Please don't do something like this in production, okay?
-        password: pass
+        password: word
     container_name: geth-miner-1
     ports:
       - 8545:8545
@@ -61,13 +61,13 @@ services:
      depends_on: 
        - geth-bootnode
      environment:
-       - address=0x3590aca93338b0721966a8d0c96ebf2c4c87c544 #derived from the private key which is passed in the args
+       - address=0x26d1ec50b4e62c1d1a40d16e7cacc6a6580757d5 #derived from the private key which is passed in the args
        - bootnodeId=76a8171707eca17647a47ca99ffd348927dfa60102792ea349a25d5192e61855be83b786e376276a306afcceea4ffd1c9c77e4370b417efc39f328a0d068004c #derived from the nodekeyhex of the bootnode
        - bootnodeIp=172.25.0.101
      build:
        context: ./node
        args:
-         privatekey: bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35
+         privatekey: 17d08f5fe8c77af811caa0c9a187e668ce3b74a99acc3f6d976f075fa8e0be55
          password: word
      container_name: geth-miner-3
      ports:

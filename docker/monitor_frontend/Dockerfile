@@ -1,6 +1,6 @@
 FROM ubuntu:xenial
 
-MAINTAINER Tim Zöller <mail@tim-zoeller.de>
+MAINTAINER Zhehao
 
 RUN apt-get update \
       && apt-get install -y wget nodejs npm ntp git\

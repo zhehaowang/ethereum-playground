@@ -1,6 +1,6 @@
 FROM ubuntu:xenial
 
-MAINTAINER Tim Zöller <mail@tim-zoeller.de>
+MAINTAINER Zhehao
 
 RUN apt-get update \
      && apt-get install -y wget \
@@ -24,7 +24,7 @@ RUN ./geth account import --password ~/.accountpassword  ~/.privatekey
 ENV address=""
 ENV bootnodeId=""
 ENV bootnodeIp=""
-CMD exec ./geth --bootnodes "enode://$bootnodeId@$bootnodeIp:30301" --networkid="500" --verbosity=4 --rpc --rpcaddr "0.0.0.0" --rpccorsdomain "*" --mine --etherbase $address --unlock $address --password ~/.accountpassword --rpcapi="db,eth,net,web3,personal,miner"
+CMD exec ./geth --bootnodes "enode://$bootnodeId@$bootnodeIp:30301" --networkid="500" --verbosity=3 --rpc --rpcaddr "0.0.0.0" --rpccorsdomain "*" --mine --etherbase $address --unlock $address --password ~/.accountpassword --rpcapi="db,eth,net,web3,personal,miner,clique"
 
 EXPOSE 8545
 EXPOSE 30303
