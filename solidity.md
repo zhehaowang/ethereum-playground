@@ -42,3 +42,5 @@ A transaction can be reverted, but the longer you wait, the less likely it will 
 * [EVM instruction set](https://solidity.readthedocs.io/en/latest/assembly.html#opcodes) (arithmetic, bit, logical, comparison, conditional and unconditional jumps)
 
 * The only way to remove code from the blockchain is when a contract at that address performs `selfdestruct`. Remaining ether is returned to a target, and if someone sends ether to removed contracts, the ether is forever lost. A deleted contract is still part of the history recorded by blockchain. It may be a better idea to disable a contract than `selfdestruct` it.
+
+

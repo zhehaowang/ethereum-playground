@@ -1,10 +1,12 @@
 [
   {
-    "name"        : "geth-dev-0",
+    "name"        : "geth-dev-miner-1",
     "cwd"         : ".",
     "script"      : "app.js",
     "log_date_format"   : "YYYY-MM-DD HH:mm Z",
     "merge_logs"    : false,
+    "log_file": "/dev/null",
+    "out_file": "/dev/null",
     "watch"       : false,
     "exec_interpreter"  : "node",
     "exec_mode"     : "fork_mode",
@@ -13,17 +15,19 @@
       "NODE_ENV"    : "production",
       "RPC_HOST"    : "172.25.0.102",
       "RPC_PORT"    : "8545",
-      "INSTANCE_NAME"   : "geth-dev-0",
+      "INSTANCE_NAME"   : "geth-dev-miner-1",
       "WS_SERVER"     : "http://172.25.0.103:3000",
       "WS_SECRET"     : "test"
     }
   },
   {
-    "name"        : "geth-dev-1",
+    "name"        : "geth-dev-miner-2",
     "cwd"         : ".",
     "script"      : "app.js",
     "log_date_format"   : "YYYY-MM-DD HH:mm Z",
     "merge_logs"    : false,
+    "log_file": "/dev/null",
+    "out_file": "/dev/null",
     "watch"       : false,
     "exec_interpreter"  : "node",
     "exec_mode"     : "fork_mode",
@@ -32,17 +36,19 @@
       "NODE_ENV"    : "production",
       "RPC_HOST"    : "172.25.0.104",
       "RPC_PORT"    : "8545",
-      "INSTANCE_NAME"   : "geth-dev-1",
+      "INSTANCE_NAME"   : "geth-dev-miner-2",
       "WS_SERVER"     : "http://172.25.0.103:3000",
       "WS_SECRET"     : "test"
     }
   },
   {
-    "name"        : "geth-dev-2",
+    "name"        : "geth-dev-miner-3",
     "cwd"         : ".",
     "script"      : "app.js",
     "log_date_format"   : "YYYY-MM-DD HH:mm Z",
     "merge_logs"    : false,
+    "log_file": "/dev/null",
+    "out_file": "/dev/null",
     "watch"       : false,
     "exec_interpreter"  : "node",
     "exec_mode"     : "fork_mode",
@@ -51,7 +57,7 @@
       "NODE_ENV"    : "production",
       "RPC_HOST"    : "172.25.0.110",
       "RPC_PORT"    : "8545",
-      "INSTANCE_NAME"   : "geth-dev-2",
+      "INSTANCE_NAME"   : "geth-dev-miner-3",
       "WS_SERVER"     : "http://172.25.0.103:3000",
       "WS_SECRET"     : "test"
     }
